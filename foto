@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Fotografa</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Portfolio Fotografa</h1>
+        <nav>
+            <ul>
+                <li><a href="#portfolio">Portfolio</a></li>
+                <li><a href="#about">O mnie</a></li>
+                <li><a href="#contact">Kontakt</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="portfolio">
+        <h2>Moje prace</h2>
+        <div class="gallery">
+            <img src="images/photo1.jpg" alt="Zdjęcie 1" class="gallery-item">
+            <img src="images/photo2.jpg" alt="Zdjęcie 2" class="gallery-item">
+            <img src="images/photo3.jpg" alt="Zdjęcie 3" class="gallery-item">
+        </div>
+        <div id="lightbox" class="hidden">
+            <span id="close">&times;</span>
+            <img id="lightbox-img" src="" alt="">
+        </div>
+    </section>
+
+    <section id="about">
+        <h2>O mnie</h2>
+        <p>Cześć! Jestem fotografem specjalizującym się w uchwyceniu wyjątkowych momentów.</p>
+    </section>
+
+    <section id="contact">
+        <h2>Kontakt</h2>
+        <form action="send_email.php" method="POST">
+            <label for="name">Imię:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="message">Wiadomość:</label>
+            <textarea id="message" name="message" required></textarea>
+
+            <button type="submit">Wyślij</button>
+        </form>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Portfolio Fotografa</p>
+    </footer>
+</body>
+</html>
+/* Ogólny styl */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+header {
+    background: #333;
+    color: #fff;
+    padding: 1rem;
+    text-align: center;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 10px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+section {
+    padding: 2rem;
+    text-align: center;
+}
+
+.gallery {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.gallery img {
+    max-width: 300px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+#lightbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+#lightbox img {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 5px;
+}
+
+#lightbox.hidden {
+    display: none;
+}
+
+#close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+form {
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+form label {
+    display: block;
+    margin: 0.5rem 0 0.2rem;
+}
+
+form input, form textarea, form button {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+footer {
+    background: #333;
+    color: #fff;
+    text-align: center;
+    padding: 1rem 0;
+    margin-top: 2rem;
+}
+document.querySelectorAll('.gallery-item').forEach(item => {
+    item.addEventListener('click', event => {
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        lightboxImg.src = event.target.src;
+        lightbox.classList.remove('hidden');
+    });
+});
+
+document.getElementById('close').addEventListener('click', () => {
+    document.getElementById('lightbox').classList.add('hidden');
+});
+<?php
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $name = htmlspecialchars($_POST['name']);
+    $email = htmlspecialchars($_POST['email']);
+    $message = htmlspecialchars($_POST['message']);
+
+    $to = "twoj_email@example.com"; // Wstaw swój adres e-mail
+    $subject = "Nowa wiadomość od: $name";
+    $body = "Imię: $name\nEmail: $email\n\nWiadomość:\n$message";
+    $headers = "From: $email";
+
+    if (mail($to, $subject, $body, $headers)) {
+        echo "Wiadomość została wysłana!";
+    } else {
+        echo "Wystąpił problem. Spróbuj ponownie.";
+    }
+}
+?>
